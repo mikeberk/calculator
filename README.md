@@ -1,0 +1,1 @@
+This is the calculator project for The Odin Project. It has a professional looking user interface and the functionality of a standard calculator. Try it out!
