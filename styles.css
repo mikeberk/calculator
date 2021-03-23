@@ -3,3 +3,29 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    border: 1px solid black;
+}
+
+.btn-group {
+    width: 160px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 5px;
+}
+
+.btn {
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+    border: none;
+    background-color: lightblue;
+    border-radius: 50%;
+}
