@@ -11,10 +11,10 @@ function operate (operator, a, b) {
         case "-":
             return subtract(a, b);
             break;
-        case "*":
+        case "x":
             return multiply(a, b);
             break;
-        case "/":
+        case "÷":
             return divide(a, b);
             break;
     }
@@ -49,28 +49,77 @@ function clickHandler (btn) {
             case '8':
             case '9':
             case '0':
-                currentInput = currentInput.concat(e.target.innerText)
-                display.textContent = currentInput;
+                if (lastBtn == 'equal') {
+                    operA = 0;
+                    currentInput = currentInput.concat(e.target.innerText)
+                    display.textContent = currentInput;
+                    lastBtn = 'num';
+                } else {
+                    currentInput = currentInput.concat(e.target.innerText)
+                    display.textContent = currentInput;
+                    lastBtn = 'num';
+                }
+                console.log(lastBtn);
                 break;
             case 'AC':
                 currentInput = '';
                 operA = 0;
                 operB = 0;
                 display.textContent = '0';
+                lastBtn = 'clear';
+                console.log(lastBtn);
                 break;
             case '+':
-                currentInput = operate('+', operA, parseFloat(currentInput));
-                display.textContent = currentInput;
-                operA = parseFloat(currentInput);
-                currentInput = '';
-                currentOperator = '+';
+            case '-':
+            case '÷':
+            case 'x':
+                if (lastBtn == 'clear') {
+                    currentOperator = e.target.innerText;
+                    lastBtn = 'operator';
+                }
+                else if (lastBtn == 'equal') {
+                    operA = parseFloat(display.textContent);
+                    currentOperator = e.target.innerText;
+                    lastBtn = 'operator';
+                }
+                else if (lastBtn == 'operator') {
+                    currentOperator = e.target.innerText;
+                    lastBtn = 'operator';
+                }
+                else {
+                    if (operA != 0) {
+                        currentInput = operate(e.target.innerText, operA, parseFloat(currentInput));
+                        display.textContent = currentInput;
+                    }
+                    operA = parseFloat(currentInput);
+                    currentInput = '';
+                    currentOperator = e.target.innerText;
+                    lastBtn = 'operator';
+                }
+                console.log(lastBtn);
                 break;
             case '=':
-                operB = parseFloat(currentInput);
-                currentInput = operate(currentOperator, operA, operB).toString();
-                display.textContent = currentInput;
-                operA = parseFloat(currentInput);
-                currentInput = '';
+                if (lastBtn == 'clear') {
+                    break;
+                }
+                else if (lastBtn == 'equal') {
+                    operA = parseFloat(display.textContent);
+                    currentInput = operate(currentOperator, operA, operB).toString();
+                    display.textContent = currentInput;
+                    operA = parseFloat(currentInput);
+                    currentInput = '';
+                    lastBtn = 'equal';
+                }
+                else {
+                    operB = parseFloat(currentInput);
+                    currentInput = operate(currentOperator, operA, operB).toString();
+                    display.textContent = currentInput;
+                    operA = parseFloat(currentInput);
+                    currentInput = '';
+                    lastBtn = 'equal';
+                }
+                console.log(lastBtn);
+                break;
         }
     })
 }
@@ -79,5 +128,6 @@ let currentInput = '';
 let operA = 0;
 let operB = 0;
 let currentOperator = '';
+let lastBtn = 'clear';
 btns.forEach(btn => clickHandler(btn));
 
