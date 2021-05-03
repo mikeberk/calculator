@@ -35,6 +35,15 @@ const nineBtn = document.querySelector('.nine');
 const zeroBtn = document.querySelector('.zero');
 */
 
+// render function
+function render (result) {
+    if (result.length > 12) {
+        display.textContent = parseFloat(result).toExponential(7);
+    } else {
+        display.textContent = result;
+    }
+}
+
 // main click function
 function clickHandler (btn) {
     btn.addEventListener('click', (e) => {
@@ -51,12 +60,12 @@ function clickHandler (btn) {
             case '0':
                 if (lastBtn == 'equal') {
                     operA = 0;
-                    currentInput = currentInput.concat(e.target.innerText)
-                    display.textContent = currentInput;
+                    currentInput = currentInput.concat(e.target.innerText);
+                    render(currentInput);
                     lastBtn = 'num';
                 } else {
-                    currentInput = currentInput.concat(e.target.innerText)
-                    display.textContent = currentInput;
+                    currentInput = currentInput.concat(e.target.innerText);
+                    render(currentInput);
                     lastBtn = 'num';
                 }
                 console.log(lastBtn);
@@ -65,9 +74,62 @@ function clickHandler (btn) {
                 currentInput = '';
                 operA = 0;
                 operB = 0;
-                display.textContent = '0';
+                render('0');
                 lastBtn = 'clear';
                 console.log(lastBtn);
+                break;
+            case '.':
+                if (display.textContent.includes('.')) {
+                    break;
+                } else {
+                    if (currentInput == '') {
+                        if (lastBtn == 'equal') {
+                            operA = 0;
+                            currentInput = currentInput.concat('0' + e.target.innerText);
+                            render(currentInput);
+                            lastBtn = 'num';
+                        } else {
+                            currentInput = currentInput.concat('0' + e.target.innerText);
+                            render(currentInput);
+                            lastBtn = 'num';
+                        }
+                    } else {
+                        if (lastBtn == 'equal') {
+                            operA = 0;
+                            currentInput = currentInput.concat(e.target.innerText);
+                            render(currentInput);
+                            lastBtn = 'num';
+                        } else {
+                            currentInput = currentInput.concat(e.target.innerText);
+                            render(currentInput);
+                            lastBtn = 'num';
+                        }
+                    }
+                    break;
+                }
+            case '+/-':
+                if (lastBtn == 'equal') {
+                    operA = 0;
+                    currentInput = (parseFloat(display.textContent) * -1).toString();
+                    render(currentInput);
+                    lastBtn = 'num';
+                } else {
+                    currentInput = (parseFloat(display.textContent) * -1).toString();
+                    render(currentInput.toString());
+                    lastBtn = 'num';
+                }
+                break;
+            case '%':
+                if (lastBtn == 'equal') {
+                    operA = 0;
+                    currentInput = (parseFloat(display.textContent) / 100).toString();
+                    render(currentInput);
+                    lastBtn = 'num';
+                } else {
+                    currentInput = (parseFloat(display.textContent) / 100).toString();
+                    render(currentInput);
+                    lastBtn = 'num';
+                }
                 break;
             case '+':
             case '-':
@@ -89,7 +151,7 @@ function clickHandler (btn) {
                 else {
                     if (operA != 0) {
                         currentInput = operate(e.target.innerText, operA, parseFloat(currentInput));
-                        display.textContent = currentInput;
+                        render(currentInput);
                     }
                     operA = parseFloat(currentInput);
                     currentInput = '';
@@ -105,7 +167,7 @@ function clickHandler (btn) {
                 else if (lastBtn == 'equal') {
                     operA = parseFloat(display.textContent);
                     currentInput = operate(currentOperator, operA, operB).toString();
-                    display.textContent = currentInput;
+                    render(currentInput);
                     operA = parseFloat(currentInput);
                     currentInput = '';
                     lastBtn = 'equal';
@@ -113,7 +175,7 @@ function clickHandler (btn) {
                 else {
                     operB = parseFloat(currentInput);
                     currentInput = operate(currentOperator, operA, operB).toString();
-                    display.textContent = currentInput;
+                    render(currentInput);
                     operA = parseFloat(currentInput);
                     currentInput = '';
                     lastBtn = 'equal';
