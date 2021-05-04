@@ -39,6 +39,8 @@ const zeroBtn = document.querySelector('.zero');
 function render (result) {
     if (result.length > 12) {
         display.textContent = parseFloat(result).toExponential(7);
+    } else if (result == 'Infinity') {
+        display.textContent = 'Error'
     } else {
         display.textContent = result;
     }
